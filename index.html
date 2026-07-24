@@ -606,9 +606,7 @@ async function sendMessage(text){
     });
     const data = await response.json();
     const replyText = data.reply || "Sorry, I couldn't find an answer.";
-      .map(b => b.type === 'text' ? b.text : '')
-      .join('\n').trim() || "Sorry, I couldn't find an answer to that.";
-
+     
     thinkingBubble.remove();
     addMessage('assistant', replyText);
     history.push({ role: 'assistant', content: replyText });
