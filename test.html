@@ -1,1 +1,48 @@
 
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Knowledge Test Runner</title>
+</head>
+<body>
+
+<h1>Knowledge Test Runner</h1>
+
+<button onclick="runTests()">Run Tests</button>
+
+<div id="results"></div>
+
+<script>
+const prompts = [
+    "Who is Ankit Pandey?",
+    "Tell me about Ankit's experience at Bajaj Finserv.",
+    "What is Ankit's educational background?",
+    "Where did Ankit complete his MBA?",
+    "What AI projects has Ankit built?"
+];
+
+async function runTests() {
+    document.getElementById("results").innerHTML = "";
+
+    for (const prompt of prompts) {
+        const response = await fetch("https://silent-sea-bd9b.ankitpandeycs.workers.dev", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ message: prompt })
+        });
+
+        const data = await response.json();
+
+        document.getElementById("results").innerHTML += `
+            <h3>${prompt}</h3>
+            <pre>${data.reply}</pre>
+            <hr>
+        `;
+    }
+}
+</script>
+
+</body>
+</html>
