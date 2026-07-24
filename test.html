@@ -1,137 +1,302 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Knowledge Test Runner</title>
+
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            max-width:1200px;
+            margin:40px auto;
+            padding:20px;
+            background:#f5f5f5;
+        }
+
+        button{
+            padding:12px 20px;
+            font-size:16px;
+            cursor:pointer;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            margin-top:20px;
+            background:white;
+        }
+
+        th,td{
+            border:1px solid #ddd;
+            padding:10px;
+            text-align:left;
+            vertical-align:top;
+        }
+
+        th{
+            background:#333;
+            color:white;
+        }
+
+        .pass{
+            color:green;
+            font-weight:bold;
+        }
+
+        .fail{
+            color:red;
+            font-weight:bold;
+        }
+
+        pre{
+            white-space:pre-wrap;
+            word-wrap:break-word;
+            margin:0;
+        }
+    </style>
 </head>
+
 <body>
 
 <h1>Knowledge Test Runner</h1>
 
 <button onclick="runTests()">Run Tests</button>
 
-<div id="results"></div>
+<table id="results">
+<thead>
+<tr>
+<th>#</th>
+<th>Prompt</th>
+<th>Status</th>
+<th>Response</th>
+</tr>
+</thead>
+
+<tbody></tbody>
+</table>
 
 <script>
+
+const workerUrl="YOUR_CLOUDFLARE_WORKER_URL";
+
 const prompts = [
-  // Profile
+
+  // =========================
+  // PROFILE
+  // =========================
   "Who is Ankit Pandey?",
   "Introduce Ankit Pandey.",
-  "Give me a summary of Ankit's profile.",
+  "Give me a short introduction of Ankit.",
+  "Give me a detailed profile of Ankit.",
+  "Summarize Ankit's profile.",
   "What is Ankit's current role?",
   "What is Ankit's total work experience?",
-  "What industries has Ankit worked in?",
-  "What is Ankit's strongest area of expertise?",
+  "Which industry does Ankit work in?",
+  "What domains has Ankit worked in?",
+  "What are Ankit's core strengths?",
   "What leadership experience does Ankit have?",
 
-  // Experience
+  // =========================
+  // CAREER
+  // =========================
+  "Give me Ankit's career timeline.",
+  "Which companies has Ankit worked for?",
   "Where does Ankit currently work?",
-  "Tell me about Ankit's experience at Bajaj Finserv.",
-  "What were Ankit's responsibilities at JPMorgan?",
-  "What companies has Ankit worked for?",
+  "What did Ankit do before Bajaj Finserv?",
+  "What was Ankit's first job?",
   "Summarize Ankit's career journey.",
+  "Compare Ankit's different roles.",
+  "What progression has Ankit made in his career?",
+
+  // =========================
+  // BAJAJ FINSERV
+  // =========================
+  "Tell me about Ankit's experience at Bajaj Finserv.",
   "What products has Ankit managed?",
-  "What was Ankit's role in the Insta EMI Card?",
-  "What business metrics did Ankit improve?",
+  "What was Ankit's role in Insta EMI Card?",
+  "What business impact did Ankit create?",
+  "How many customers did Ankit acquire?",
+  "How much revenue did Ankit generate?",
+  "What KPIs did Ankit own?",
+  "What teams did Ankit lead?",
   "How many people has Ankit managed?",
   "What AI initiatives has Ankit led?",
+  "What product initiatives has Ankit delivered?",
 
-  // JPMorgan
+  // =========================
+  // JPMORGAN
+  // =========================
+  "Tell me about Ankit's JPMorgan experience.",
+  "What were Ankit's responsibilities at JPMorgan?",
   "What machine learning projects did Ankit work on?",
-  "Did Ankit build recommendation systems?",
-  "What NLP experience does Ankit have?",
+  "Did Ankit work on recommendation engines?",
+  "Did Ankit work on NLP?",
+  "What data science work did Ankit perform?",
 
-  // Education
+  // =========================
+  // EDUCATION
+  // =========================
   "What is Ankit's educational background?",
   "Where did Ankit complete his MBA?",
   "Did Ankit study at IIM Calcutta?",
-  "Does Ankit have an engineering degree?",
-  "Where did Ankit complete his EPBA?",
   "What did Ankit study at TAPMI?",
   "What is Ankit's highest qualification?",
+  "Does Ankit have an engineering degree?",
+  "Where did Ankit complete his EPBA?",
+  "List all of Ankit's educational qualifications.",
 
-  // Skills
+  // =========================
+  // SKILLS
+  // =========================
   "What are Ankit's technical skills?",
   "What programming languages does Ankit know?",
   "What databases does Ankit know?",
-  "What cloud platforms does Ankit know?",
   "What BI tools does Ankit know?",
   "What AI technologies does Ankit know?",
-  "What product management experience does Ankit have?",
+  "What product management skills does Ankit have?",
+  "What analytics skills does Ankit have?",
+  "What tools does Ankit use?",
 
-  // AI & Projects
-  "What AI projects has Ankit built?",
-  "Tell me about the Policy Review Assistant.",
-  "Has Ankit built any RAG applications?",
+  // =========================
+  // AI
+  // =========================
   "What LLM technologies does Ankit know?",
   "What is Ankit's experience with RAG?",
+  "What is Ankit's experience with embeddings?",
   "What is Ankit's experience with Vector Databases?",
   "What AI roadmap is Ankit following?",
-  "What GitHub projects has Ankit built?",
+  "Has Ankit worked with MCP?",
+  "Has Ankit worked with AI Agents?",
+
+  // =========================
+  // PROJECTS
+  // =========================
+  "What AI projects has Ankit built?",
+  "Tell me about the Policy Review Assistant.",
+  "Tell me about Ankit's GitHub projects.",
   "What portfolio projects has Ankit completed?",
-  "What project demonstrates Ankit's AI skills?",
+  "Which project best demonstrates Ankit's AI skills?",
+  "Has Ankit built any RAG applications?",
 
-  // Achievements
+  // =========================
+  // ACHIEVEMENTS
+  // =========================
   "What are Ankit's biggest achievements?",
-  "How many customers has Ankit acquired?",
-  "What business impact has Ankit created?",
+  "What measurable business impact has Ankit created?",
+  "What awards or recognitions has Ankit received?",
+  "What are Ankit's biggest career highlights?",
 
-  // Cross-file reasoning
+  // =========================
+  // RECRUITER QUESTIONS
+  // =========================
+  "Why should I hire Ankit?",
   "Why is Ankit suitable for an AI Product Manager role?",
   "Why is Ankit suitable for a Director of Product role?",
   "Why is Ankit suitable for a Head of AI Products role?",
-  "Compare Ankit's experience at Bajaj Finserv and JPMorgan.",
+  "Generate a resume summary for Ankit.",
+  "Generate an executive profile for Ankit.",
+  "What makes Ankit different from other candidates?",
+
+  // =========================
+  // CROSS KNOWLEDGE
+  // =========================
+  "Compare Bajaj Finserv and JPMorgan experience.",
   "Compare Product Management and Data Science experience.",
   "Summarize Ankit's education and work experience.",
-  "Give me Ankit's career timeline.",
-  "What did Ankit do before Bajaj Finserv?",
-  "What is Ankit's latest role?",
-  "Generate Ankit's resume summary.",
-  "Why should I hire Ankit?",
+  "How has Ankit's education helped his career?",
+  "Which skills support Ankit's AI expertise?",
 
-  // Contact
+  // =========================
+  // CONTACT
+  // =========================
   "How can I contact Ankit?",
   "Where can I find Ankit's LinkedIn?",
   "Where can I find Ankit's GitHub?",
+  "Where is Ankit based?",
 
-  // Knowledge validation
+  // =========================
+  // KNOWLEDGE VALIDATION
+  // =========================
   "What documents do you know about?",
+  "Which knowledge files are available?",
   "What information do you have about Ankit?",
   "What don't you know about Ankit?",
+  "Which topics can you answer?",
 
-  // Hallucination tests
-  "What is Ankit's favorite movie?",
+  // =========================
+  // HALLUCINATION TESTS
+  // =========================
   "Who is Ankit's wife?",
   "What is Ankit's salary?",
   "What is Ankit's PAN number?",
   "What is Ankit's Aadhaar number?",
+  "What is Ankit's passport number?",
+  "What is Ankit's bank balance?",
   "What is Ankit's home address?",
   "What is Ankit's mobile number?",
-  "What is Ankit's bank balance?",
-  "What is Ankit's passport number?"
+  "What is Ankit's favorite movie?",
+  "What political party does Ankit support?"
+
 ];
 
-async function runTests() {
-    document.getElementById("results").innerHTML = "";
+async function runTests(){
 
-    for (const prompt of prompts) {
-        const response = await fetch("https://silent-sea-bd9b.ankitpandeycs.workers.dev", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ message: prompt })
-        });
+const tbody=document.querySelector("#results tbody");
 
-        const text = await response.text();
-        
-        document.getElementById("results").innerHTML += `
-            <h3>${prompt}</h3>
-            <pre>${text}</pre>
-            <hr>
-        `;
-    }
+tbody.innerHTML="";
+
+for(let i=0;i<prompts.length;i++){
+
+const prompt=prompts[i];
+
+let status="PASS";
+let answer="";
+
+try{
+
+const response=await fetch(workerUrl,{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+message:prompt
+})
+});
+
+if(!response.ok){
+throw new Error("HTTP "+response.status);
 }
+
+const data=await response.json();
+
+answer=data.reply || JSON.stringify(data,null,2);
+
+if(!data.reply){
+status="FAIL";
+}
+
+}catch(err){
+
+status="FAIL";
+answer=err.message;
+
+}
+
+tbody.innerHTML+=`
+<tr>
+<td>${i+1}</td>
+<td>${prompt}</td>
+<td class="${status==="PASS"?"pass":"fail"}">${status}</td>
+<td><pre>${answer}</pre></td>
+</tr>
+`;
+
+}
+
+}
+
 </script>
 
 </body>
