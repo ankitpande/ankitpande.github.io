@@ -123,11 +123,11 @@ async function runTests() {
             body: JSON.stringify({ message: prompt })
         });
 
-        const data = await response.json();
-
+        const text = await response.text();
+        
         document.getElementById("results").innerHTML += `
             <h3>${prompt}</h3>
-            <pre>${data.reply}</pre>
+            <pre>${text}</pre>
             <hr>
         `;
     }
