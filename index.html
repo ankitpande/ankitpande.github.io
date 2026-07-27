@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ankit Pandey — Personal Archive</title>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -308,7 +308,7 @@
       <a href="#education">04 — Education</a>
       <a href="#honors">05 — Honors</a>
       <a href="#recommendations">06 — Said about me</a>
-      <a href="#desk">07 — Ask the archive</a>
+      <a href="#desk" id="navDeskLink">07 — Ask the archive</a>
     </div>
   </section>
 
@@ -554,11 +554,13 @@ function removeChatCompletely() {
   if (deskSection) {
     deskSection.style.display = 'none';
   }
-  const navLinks = document.querySelectorAll('a[href="#desk"]');
-  navLinks.forEach(link => link.remove());
+  const navLink = document.getElementById('navDeskLink');
+  if (navLink) {
+    navLink.remove();
+  }
 }
 
-// 1. Check token status from worker immediately on page load
+// Check token status from worker immediately on page load
 async function checkInitialTokenStatus() {
   try {
     const response = await fetch(`${WORKER_URL}/status`);
@@ -585,7 +587,6 @@ function addMessage(role, text, thinking=false){
   return div;
 }
 
-// 2. Track exhaustion dynamically during chat session responses
 async function sendMessage(text){
   const cleanText = text.trim();
   if(!cleanText) return;
