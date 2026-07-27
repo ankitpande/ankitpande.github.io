@@ -1,640 +1,344 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ankit Pandey — Personal Archive</title>
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --ink:#1c1b19;
-    --ink-soft:#2a2825;
-    --paper:#e9e1cd;
-    --paper-light:#f2ecdc;
-    --forest:#3f5a3d;
-    --rust:#b5482a;
-    --gold:#c9a84c;
-    --line: rgba(28,27,25,0.15);
-    --line-light: rgba(233,225,205,0.2);
-  }
-  *{box-sizing:border-box; margin:0; padding:0;}
-  html{scroll-behavior:smooth; background:var(--ink);}
-  body{
-    background:var(--ink);
-    color:var(--paper);
-    font-family:'Inter', sans-serif;
-    line-height:1.55;
-    min-height:100vh;
-  }
-  ::selection{ background:var(--rust); color:var(--paper-light); }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ankit Pandey | AI Engineer & Portfolio</title>
+  
+  <!-- Inter Font & FontAwesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
-  .wrap{ max-width:900px; margin:0 auto; padding:0 24px; }
+  <style>
+    :root {
+      --bg-dark: #0f172a;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --accent: #38bdf8;
+      --accent-hover: #0284c7;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --danger: #ef4444;
+      --radius: 12px;
+    }
 
-  /* ---------- HERO ---------- */
-  .hero{
-    min-height:92vh;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    position:relative;
-    border-bottom:1px solid var(--line-light);
-    padding:80px 0 60px;
-  }
-  .hero-top{ display:flex; align-items:center; gap:22px; margin-bottom:22px; }
-  .hero-label{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:12px;
-    letter-spacing:0.14em;
-    text-transform:uppercase;
-    color:var(--rust);
-  }
-  .hero h1{
-    font-family:'Fraunces', serif;
-    font-weight:600;
-    font-size:clamp(2.6rem, 8.5vw, 5.6rem);
-    line-height:0.98;
-    letter-spacing:-0.01em;
-  }
-  .hero .role{
-    font-family:'Fraunces', serif;
-    font-style:italic;
-    font-weight:400;
-    font-size:clamp(1.05rem, 2.8vw, 1.5rem);
-    color:var(--paper);
-    opacity:0.75;
-    margin-top:16px;
-  }
-  .hero .dek{
-    max-width:58ch;
-    margin-top:26px;
-    font-size:1.05rem;
-    color:var(--paper);
-    opacity:0.65;
-  }
-  .catalog-index{
-    margin-top:40px;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:12px;
-    color:var(--paper);
-    opacity:0.72;
-    display:flex;
-    gap:24px;
-    flex-wrap:wrap;
-  }
-  .catalog-index span{ letter-spacing:0.04em; }
-  .catalog-index.nav a{
-    color:var(--paper);
-    opacity:0.85;
-    text-decoration:none;
-    letter-spacing:0.04em;
-    border-bottom:1px solid transparent;
-  }
-  .catalog-index.nav a:hover{ opacity:1; border-bottom-color:var(--gold); }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding-bottom: 80px;
+    }
 
-  /* ---------- SECTIONS AS INDEX CARDS ---------- */
-  .drawer{ padding:80px 0; }
-  .drawer-label{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:12px;
-    letter-spacing:0.14em;
-    text-transform:uppercase;
-    color:var(--rust);
-    margin-bottom:36px;
-    display:flex;
-    align-items:center;
-    gap:12px;
-  }
-  .drawer-label::after{
-    content:'';
-    flex:1;
-    height:1px;
-    background:var(--line-light);
-  }
+    /* Container & Layout */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
 
-  .card{
-    background:var(--paper);
-    color:var(--ink);
-    border-radius:2px;
-    padding:32px 36px;
-    margin-bottom:18px;
-    position:relative;
-    box-shadow: 0 1px 0 rgba(0,0,0,0.3);
-  }
-  .card::before{
-    content: attr(data-tab);
-    position:absolute;
-    top:-11px;
-    left:30px;
-    background:var(--forest);
-    color:var(--paper-light);
-    font-family:'IBM Plex Mono', monospace;
-    font-size:10px;
-    letter-spacing:0.1em;
-    text-transform:uppercase;
-    padding:4px 10px;
-    border-radius:2px;
-  }
-  .card h3{
-    font-family:'Fraunces', serif;
-    font-weight:600;
-    font-size:1.4rem;
-    margin-bottom:12px;
-  }
-  .card p{ opacity:0.85; }
-  .card p + p{ margin-top:10px; }
+    header {
+      padding: 24px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--card-border);
+    }
+    .logo { font-weight: 700; font-size: 1.25rem; color: var(--accent); }
+    nav a { color: var(--text-muted); text-decoration: none; margin-left: 20px; font-weight: 500; transition: 0.2s; }
+    nav a:hover { color: var(--text-main); }
 
-  .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:18px; }
-  @media(max-width:640px){ .grid-2{ grid-template-columns:1fr; } }
+    /* Hero Section */
+    .hero {
+      padding: 60px 0 40px;
+      text-align: left;
+    }
+    .hero h1 { font-size: 2.75rem; font-weight: 800; margin-bottom: 12px; }
+    .hero p { font-size: 1.2rem; color: var(--text-muted); max-width: 650px; }
 
-  .tag-row{ display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
-  .tag{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11px;
-    letter-spacing:0.03em;
-    border:1px solid var(--ink);
-    color:var(--ink);
-    padding:5px 10px;
-    border-radius:20px;
-    opacity:0.75;
-  }
+    /* Contact Grid (Dynamic & Aligned) */
+    .section-title { font-size: 1.5rem; margin: 40px 0 20px; font-weight: 600; }
+    
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-bottom: 40px;
+    }
 
-  /* career timeline grouped by employer */
-  .employer-block{ margin-bottom:6px; }
-  .employer-name{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11px;
-    letter-spacing:0.08em;
-    text-transform:uppercase;
-    color:var(--forest);
-    opacity:1;
-    margin-bottom:6px;
-  }
-  .timeline-item{
-    display:flex;
-    gap:20px;
-    padding:14px 0;
-    border-bottom:1px solid var(--line);
-  }
-  .timeline-item:last-child{ border-bottom:none; }
-  .timeline-year{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11.5px;
-    opacity:0.55;
-    min-width:112px;
-    padding-top:3px;
-  }
-  .timeline-body h4{ font-family:'Fraunces', serif; font-size:1.08rem; font-weight:600; }
-  .timeline-body p{ opacity:0.75; font-size:0.93rem; margin-top:4px; }
+    .contact-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      text-decoration: none;
+      color: var(--text-main);
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .contact-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent);
+    }
+    .contact-card i { font-size: 1.5rem; color: var(--accent); }
+    .contact-card .details label { display: block; font-size: 0.8rem; color: var(--text-muted); }
+    .contact-card .details span { font-weight: 600; font-size: 0.95rem; }
 
-  /* honors list */
-  .honor-item{ padding:16px 0; border-bottom:1px solid var(--line); }
-  .honor-item:last-child{ border-bottom:none; }
-  .honor-item h4{ font-family:'Fraunces', serif; font-size:1.05rem; font-weight:600; }
-  .honor-item .honor-meta{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:10.5px;
-    color:var(--forest);
-    opacity:1;
-    margin-top:2px;
-    letter-spacing:0.03em;
-  }
-  .honor-item p{ opacity:0.8; font-size:0.92rem; margin-top:6px; }
+    /* Chat Floating Toggle Button */
+    #chat-toggle {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--accent);
+      color: #000;
+      border: none;
+      padding: 14px 22px;
+      border-radius: 30px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 10px 25px rgba(56, 189, 248, 0.3);
+      transition: 0.2s;
+      z-index: 1000;
+    }
+    #chat-toggle:hover { background: var(--accent-hover); color: #fff; }
 
-  /* recommendation quote cards */
-  .quote-card{
-    background:var(--paper);
-    color:var(--ink);
-    border-radius:2px;
-    padding:30px 34px;
-    margin-bottom:16px;
-    position:relative;
-    border-left:3px solid var(--gold);
-  }
-  .quote-card p{ font-family:'Fraunces', serif; font-style:italic; font-size:1.05rem; opacity:0.9; line-height:1.6; }
-  .quote-attr{
-    margin-top:16px;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11px;
-    color:var(--ink);
-    opacity:0.75;
-    letter-spacing:0.02em;
-  }
-  .quote-attr strong{ font-style:normal; opacity:1; color:var(--rust); }
+    /* Chat Modal Window */
+    #chat-window {
+      position: fixed;
+      bottom: 90px;
+      right: 24px;
+      width: 380px;
+      height: 520px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      display: none;
+      flex-direction: column;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      z-index: 1000;
+      overflow: hidden;
+    }
 
-  /* ---------- REFERENCE DESK (CHAT) ---------- */
-  .desk{ padding:80px 0 140px; }
-  .desk-header{ margin-bottom:32px; }
-  .desk-header h2{
-    font-family:'Fraunces', serif;
-    font-weight:600;
-    font-size:clamp(1.8rem, 5vw, 2.6rem);
-  }
-  .desk-header p{ opacity:0.6; margin-top:10px; max-width:52ch; }
+    .chat-header {
+      padding: 16px;
+      background: #0f172a;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .chat-header h4 { font-size: 0.95rem; display: flex; align-items: center; gap: 8px; }
+    .close-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.1rem; }
 
-  .terminal{ background:var(--paper); color:var(--ink); border-radius:3px; overflow:hidden; }
-  .terminal-bar{
-    display:flex; align-items:center; gap:8px;
-    padding:12px 16px;
-    background:var(--paper-light);
-    border-bottom:1px solid var(--line);
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11px; opacity:0.6;
-  }
-  .dot{ width:8px; height:8px; border-radius:50%; background:var(--ink); opacity:0.25; }
+    .chat-body {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      font-size: 0.9rem;
+    }
 
-  .chat-log{
-    max-height:420px; overflow-y:auto; padding:24px;
-    display:flex; flex-direction:column; gap:18px;
-  }
-  .msg{ max-width:88%; }
-  .msg.user{ align-self:flex-end; text-align:right; }
-  .msg .role-tag{
-    font-family:'IBM Plex Mono', monospace; font-size:10px;
-    text-transform:uppercase; letter-spacing:0.08em; opacity:0.65; margin-bottom:4px;
-  }
-  .msg .bubble{ padding:12px 16px; border-radius:2px; font-size:0.95rem; line-height:1.5; }
-  .msg.assistant .bubble{ background:var(--paper-light); border:1px solid var(--line); }
-  .msg.user .bubble{ background:var(--forest); color:var(--paper-light); }
-  .msg.assistant .bubble.thinking{ opacity:0.5; font-style:italic; }
+    .msg { padding: 10px 14px; border-radius: 8px; max-width: 85%; }
+    .msg.user { background: var(--accent); color: #000; align-self: flex-end; font-weight: 500; }
+    .msg.bot { background: #334155; color: var(--text-main); align-self: flex-start; white-space: pre-wrap; }
+    .msg.system { background: rgba(239, 68, 68, 0.1); border: 1px solid var(--danger); color: var(--danger); align-self: center; text-align: center; font-size: 0.8rem; width: 100%; }
 
-  .chip-row{ display:flex; flex-wrap:wrap; gap:8px; padding:0 24px 16px; }
-  .chip{
-    font-family:'IBM Plex Mono', monospace; font-size:11.5px;
-    border:1px solid var(--line); background:transparent; color:var(--ink);
-    padding:7px 12px; border-radius:20px; cursor:pointer; opacity:0.75;
-    transition: all 0.15s ease;
-  }
-  .chip:hover{ opacity:1; border-color:var(--ink); background:var(--paper-light); }
-
-  .input-row{ display:flex; border-top:1px solid var(--line); }
-  .input-row input{
-    flex:1; border:none; background:transparent; padding:18px 20px;
-    font-family:'Inter', sans-serif; font-size:0.95rem; color:var(--ink); outline:none;
-  }
-  .input-row input::placeholder{ color:var(--ink); opacity:0.4; }
-  .input-row button{
-    border:none; background:var(--rust); color:var(--paper-light);
-    font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:0.08em;
-    text-transform:uppercase; padding:0 26px; cursor:pointer; transition: opacity 0.15s ease;
-  }
-  .input-row button:disabled{ opacity:0.4; cursor:default; }
-  .input-row button:not(:disabled):hover{ opacity:0.85; }
-
-  footer{
-    padding:40px 0 60px; text-align:center;
-    font-family:'IBM Plex Mono', monospace; font-size:11px; opacity:0.4; letter-spacing:0.05em;
-  }
-
-  @media (prefers-reduced-motion: reduce){ *{ transition:none !important; scroll-behavior:auto !important; } }
-</style>
+    .chat-footer {
+      padding: 12px;
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      gap: 8px;
+    }
+    .chat-footer input {
+      flex: 1;
+      background: #0f172a;
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      padding: 10px;
+      color: #fff;
+      outline: none;
+    }
+    .chat-footer button {
+      background: var(--accent);
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+  </style>
 </head>
 <body>
 
-<div class="wrap">
-  <section class="hero">
-    <div class="hero-top">
-      <div class="hero-label">Personal Archive · Est. 2026</div>
-    </div>
-    <h1 id="heroName">Ankit Pandey</h1>
-    <div class="role" id="heroRole">National Lead – AI, Bajaj Finance Limited</div>
-    <p class="dek" id="heroDek"></p>
-    <div class="catalog-index" id="contactRow"></div>
-    <div class="catalog-index nav">
-      <a href="#background">01 — Background</a>
-      <a href="#now">02 — Now</a>
-      <a href="#career">03 — Career</a>
-      <a href="#education">04 — Education</a>
-      <a href="#honors">05 — Honors</a>
-      <a href="#recommendations">06 — Said about me</a>
-      <a href="#desk" id="navDeskLink">07 — Ask the archive</a>
-    </div>
-  </section>
+  <div class="container">
+    <header>
+      <div class="logo">Ankit Pandey</div>
+      <nav>
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
 
-  <section class="drawer" id="background">
-    <div class="drawer-label">01 — Background</div>
-    <div class="card" data-tab="Bio">
-      <h3>Who I am</h3>
-      <p id="bioText"></p>
-    </div>
-    <div class="grid-2">
-      <div class="card" data-tab="Skills">
-        <h3>What I do</h3>
-        <div class="tag-row" id="skillsTags"></div>
-      </div>
-      <div class="card" data-tab="Certifications">
-        <h3>Certifications</h3>
-        <div class="tag-row" id="certsTags"></div>
-      </div>
-    </div>
-  </section>
+    <section class="hero">
+      <h1>AI Engineer & System Architect</h1>
+      <p>Building enterprise AI solutions, serverless middleware, and RAG architectures.</p>
+    </section>
 
-  <section class="drawer" id="now">
-    <div class="drawer-label">02 — Now</div>
-    <div class="card" data-tab="Currently">
-      <h3>What I'm working on</h3>
-      <p id="nowText"></p>
-    </div>
-  </section>
+    <!-- Aligned Dynamic Contact Cards -->
+    <h3 class="section-title" id="contact">Get in Touch</h3>
+    <div class="contact-grid">
+      <a href="mailto:your.email@example.com" class="contact-card">
+        <i class="fa-solid fa-envelope"></i>
+        <div class="details">
+          <label>Email</label>
+          <span>your.email@example.com</span>
+        </div>
+      </a>
 
-  <section class="drawer" id="career">
-    <div class="drawer-label">03 — Career</div>
-    <div class="card" data-tab="Experience">
-      <div id="timelineList"></div>
-    </div>
-  </section>
+      <a href="https://linkedin.com/in/yourprofile" target="_blank" class="contact-card">
+        <i class="fa-brands fa-linkedin"></i>
+        <div class="details">
+          <label>LinkedIn</label>
+          <span>linkedin.com/in/yourprofile</span>
+        </div>
+      </a>
 
-  <section class="drawer" id="education">
-    <div class="drawer-label">04 — Education</div>
-    <div class="card" data-tab="Education">
-      <div id="educationList"></div>
-    </div>
-  </section>
+      <a href="https://github.com/ankitpande" target="_blank" class="contact-card">
+        <i class="fa-brands fa-github"></i>
+        <div class="details">
+          <label>GitHub</label>
+          <span>github.com/ankitpande</span>
+        </div>
+      </a>
 
-  <section class="drawer" id="honors">
-    <div class="drawer-label">05 — Honors &amp; Awards</div>
-    <div class="card" data-tab="Recognition">
-      <div id="honorsList"></div>
-    </div>
-  </section>
-
-  <section class="drawer" id="recommendations">
-    <div class="drawer-label">06 — Said About Me</div>
-    <div id="recommendationsList"></div>
-  </section>
-
-  <section class="desk" id="desk">
-    <div class="desk-header">
-      <h2>Ask the archive</h2>
-      <p>This chat is grounded in everything on this page — ask it anything about my background, career, or skills.</p>
-    </div>
-    <div class="terminal">
-      <div class="terminal-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp;&nbsp;reference-desk</div>
-      <div class="chat-log" id="chatLog">
-        <div class="msg assistant">
-          <div class="role-tag">Archivist</div>
-          <div class="bubble">Ask me anything about Ankit — try one of the prompts below, or type your own.</div>
+      <div class="contact-card">
+        <i class="fa-solid fa-location-dot"></i>
+        <div class="details">
+          <label>Location</label>
+          <span>Pune, Maharashtra, India</span>
         </div>
       </div>
-      <div class="chip-row" id="chipRow"></div>
-      <div class="input-row">
-        <input id="chatInput" type="text" placeholder="Ask a question…" />
-        <button id="sendBtn">Ask</button>
-      </div>
     </div>
-  </section>
+  </div>
 
-  <footer>Built with Claude · sourced from resume &amp; LinkedIn</footer>
-</div>
+  <!-- AI Chat Widget Trigger -->
+  <button id="chat-toggle" onclick="toggleChat()">
+    <i class="fa-solid fa-robot"></i> Ask My AI Assistant
+  </button>
 
-<script>
-const CONFIG = {
-  name: "Ankit Pandey",
-  role: "National Lead – AI, Bajaj Finance Limited",
-  location: "Pune, Maharashtra, India",
-  email: "ankitpandeycs@gmail.com",
-  linkedin: "linkedin.com/in/ankitpandeycs",
-  connections: "500+ connections",
-  dek: "Product & Risk Strategist with 11+ years scaling digital lending and fintech platforms across India's leading financial institutions — now leading AI strategy at Bajaj Finance.",
-  bio: "Passionate Product & Risk Strategist with 11+ years of experience scaling digital lending and fintech platforms across India's leading financial institutions. My core strength lies in combining product innovation, data-driven risk frameworks, and AI/ML integration to build scalable, compliant, and customer-centric solutions. I have deep expertise in real-time underwriting and limit management, leveraging multibureau data and alternative data sources to drive smarter decisions.",
-  now: "I'm currently National Lead – AI at Bajaj Finance Limited, expanding my focus into AI/ML applications for fintech and leading teams that integrate product strategy, data strategy, and risk management to create transformative digital experiences. Previously, as Deputy National Lead, I scaled the Insta EMI Card business to 10M+ customers and generated ₹30Cr+ in cross-sell revenue. I'm open to senior roles in Product, Risk, or Growth where data-first decision-making sits at the heart of the business.",
-  skills: [
-    "Product Strategy & Roadmap", "Digital Lending", "Risk Analytics", "Underwriting Strategy",
-    "AI/ML Integration", "NLP", "Reinforcement Learning", "Predictive Modeling",
-    "Multibureau Strategy", "Alternate Data Underwriting", "Funnel Optimization", "UI/UX",
-    "Customer Experience", "Team Leadership", "KPI Governance", "Python", "SQL", "Power BI"
-  ],
-  certifications: [
-    "Claude Code 101 — Anthropic (Jul 2026)",
-    "Claude 101 — Anthropic (Jul 2026)",
-    "Equity Derivative Beginner Module — NSE India (2015)",
-    "Bloomberg Essentials Training Program — Equity, Commodity, Fixed Income, FX",
-    "Ethical Hacking — A.P.N. Technology (2012)",
-    "Software Development Using Java — Zensoft Services (2010)"
-  ],
-  timelineGroups: [
-    {
-      employer: "Bajaj Finserv · Pune · 6+ years",
-      roles: [
-        { year: "Jun 2026 – Present", title: "National Lead – AI", detail: "Leading AI strategy across the digital lending business." },
-        { year: "May 2023 – Jun 2026", title: "Deputy National Lead", detail: "Scaled the Insta EMI Card portfolio to 10M+ customers, generating ₹30Cr+ cross-sell revenue; drove 30% funnel conversion improvement via alternate data underwriting and multibureau strategy; led a 15-member cross-functional team." },
-        { year: "Sep 2021 – May 2023", title: "Senior Lead", detail: "Product management and analytics leadership within the digital lending organization." },
-        { year: "Mar 2020 – Sep 2021", title: "Lead", detail: "Joined Bajaj Finserv leading analytics initiatives for the digital lending business." }
-      ]
-    },
-    {
-      employer: "JPMorgan Chase & Co. · Mumbai · Sep 2018 – Feb 2020",
-      roles: [
-        { year: "Sep 2018 – Feb 2020", title: "Data Scientist", detail: "Developed NLP-based complaint categorization, reducing resolution time by 6%. Built an AI-powered resume screening engine, cutting processing time from minutes to under a second. Improved customer contactability by 7% with a collaborative filtering model, and reduced agent idle time by 4% via ML-optimized call scheduling." }
-      ]
-    },
-    {
-      employer: "HDFC Bank · Mumbai · May 2016 – Sep 2018",
-      roles: [
-        { year: "May 2016 – Sep 2018", title: "Manager, Risk Analytics", detail: "Implemented multibureau underwriting logic, increasing loan approval rates by 15% for unsecured products. Designed reinforcement learning models for credit limit optimization. Built real-time risk monitoring pipelines and dashboards using SAS, R, and Python." }
-      ]
-    },
-    {
-      employer: "Samnidhy (Student-Managed Investment Fund), TAPMI · 1 yr 10 mos",
-      roles: [
-        { year: "Mar 2015 – Mar 2016", title: "Chief Executive Officer", detail: "Led India's first Student Managed Investment Fund, a legal entity registered by the Government of Karnataka. Devised and executed long-term strategies, raised funds from investors, and managed a team of 34." },
-        { year: "Jun 2014 – Mar 2015", title: "Financial Analyst", detail: "Researched and recommended investments for potential student investors." }
-      ]
-    },
-    {
-      employer: "Aircel · Chennai · Apr – May 2015",
-      roles: [
-        { year: "Apr 2015 – May 2015", title: "Management Intern", detail: "Led an analysis of the financial impact of 4G rollout on Aircel's Chennai circle operations, using secondary research, executive interviews, and customer surveys to project data usage, device compatibility, and subscriber growth." }
-      ]
-    },
-    {
-      employer: "Tata Consultancy Services · Vadodara · Oct 2012 – May 2014",
-      roles: [
-        { year: "Oct 2012 – May 2014", title: "Assistant System Engineer", detail: "Managed the Identity & Access Management module for the Gujarat Electricity Board's RAPDRP project using Oracle Identity Manager, Oracle Access Manager, and Oracle Internet Directory; used JMeter for load testing. Represented a team of 40 professionals." }
-      ]
-    }
-  ],
-  education: [
-    { school: "Indian Institute of Management, Calcutta", detail: "Executive Programme in Business Analytics (Marketing, Operations, Data Mining, Modelling, Risk) · 2017–2018 · Certificate of Merit, graded “Excellent”" },
-    { school: "T.A. Pai Management Institute, Manipal", detail: "PGDM — Finance & Information Technology · 2014–2016 · Grade 7.49 · Activities: Samnidhy, BrandScan, Toastmasters" },
-    { school: "Rajiv Gandhi Prodyogiki Vishwavidyalaya", detail: "B.E., Computer Science · 2008–2012 · Honors, top 2 percentile of the batch" }
-  ],
-  honors: [
-    { title: "Certificate of Merit", meta: "IIM Calcutta · Jul 2018", detail: "Outstanding performance in the final exams of EPBA-07." },
-    { title: "Nominated, Titan of the Year 2016 (Best Outgoing Student)", meta: "TAPMI · Mar 2017", detail: "Awarded for excellence in academics, co-curricular & extra-curricular activities, and contributions to peer learning." },
-    { title: "Concall – Finomenal 2015", meta: "Finance Forum, TAPMI · Sep 2015", detail: "Part of the winning 4-member team in a virtual conference-call seminar simulating senior management roles (CEO/CFO/COO/CMO)." },
-    { title: "Nominated, Jaspreet Sebastian Award 2015", meta: "TAPMI · Feb 2015", detail: "For being in the top 10% of the batch on overall personality and academic performance." },
-    { title: "“The Transportation Challenge” — Winner", meta: "Operations Forum, TAPMI · Jan 2015", detail: "Part of the 2-member winning team among 30 competing teams optimizing a transportation network." },
-    { title: "BAT Gold Certificate of Achievement", meta: "Bloomberg Institute · Jan 2015", detail: "Top 5% scorer in the Bloomberg Aptitude Test." }
-  ],
-  recommendations: [
-    { quote: "Ankit is a diligent, smart and thorough data scientist who worked for me on several Collections-related projects at JP Morgan Chase. He always jumped in to analyze data sets with enthusiasm and developed machine learning algorithms that reflected strong grasp of the underlying principles. He's a great team player and a pleasure to work with.", name: "Rama Mahajanam", title: "Senior Executive VP · managed Ankit directly at JPMC" },
-    { quote: "I came in contact with Ankit at JPMC. He is a talented technical individual who's proactive about taking on new challenges, with good clarity of thought. He personally drove several ML/AI projects in the innovation area and always keeps himself updated with the latest developments in the ML space.", name: "Rohit Parmar", title: "AI & Data Science Leader · senior to Ankit at JPMC" },
-    { quote: "It was a pleasure working with Ankit for the little over two years he was part of HDFC Bank. Always looking for an opportunity to learn something new and contribute to the team.", name: "Varun Gupta", title: "Sr. Vice President, Credit Analytics and Innovation · managed Ankit directly at HDFC Bank" }
-  ],
-  suggestedQuestions: [
-    "What does Ankit do now?",
-    "What has he built with AI/ML?",
-    "What do former managers say about him?",
-    "What's his educational background?"
-  ]
-};
-
-// ---- render content from CONFIG ----
-document.getElementById('heroName').textContent = CONFIG.name;
-document.getElementById('heroRole').textContent = CONFIG.role;
-document.getElementById('heroDek').textContent = CONFIG.dek;
-document.getElementById('contactRow').innerHTML =
-  `<span>${CONFIG.location}</span><span>${CONFIG.email}</span><span>${CONFIG.linkedin}</span><span>${CONFIG.connections}</span>`;
-document.getElementById('bioText').textContent = CONFIG.bio;
-document.getElementById('nowText').textContent = CONFIG.now;
-
-document.getElementById('skillsTags').innerHTML =
-  CONFIG.skills.map(s => `<span class="tag">${s}</span>`).join('');
-document.getElementById('certsTags').innerHTML =
-  CONFIG.certifications.map(s => `<span class="tag">${s}</span>`).join('');
-
-document.getElementById('timelineList').innerHTML =
-  CONFIG.timelineGroups.map(g => `
-    <div class="employer-block">
-      <div class="employer-name">${g.employer}</div>
-      ${g.roles.map(t => `
-        <div class="timeline-item">
-          <div class="timeline-year">${t.year}</div>
-          <div class="timeline-body">
-            <h4>${t.title}</h4>
-            <p>${t.detail}</p>
-          </div>
-        </div>
-      `).join('')}
+  <!-- Floating Chat Window -->
+  <div id="chat-window">
+    <div class="chat-header">
+      <h4><i class="fa-solid fa-sparkles"></i> Portfolio AI</h4>
+      <button class="close-btn" onclick="toggleChat()"><i class="fa-solid fa-xmark"></i></button>
     </div>
-  `).join('');
-
-document.getElementById('educationList').innerHTML =
-  CONFIG.education.map(e => `
-    <div class="timeline-item" style="gap:0;">
-      <div class="timeline-body">
-        <h4>${e.school}</h4>
-        <p>${e.detail}</p>
-      </div>
+    <div class="chat-body" id="chat-body">
+      <div class="msg bot">Hi! I'm Ankit's AI Assistant. Ask me anything about his experience, projects, or technical skills.</div>
     </div>
-  `).join('');
-
-document.getElementById('honorsList').innerHTML =
-  CONFIG.honors.map(h => `
-    <div class="honor-item">
-      <h4>${h.title}</h4>
-      <div class="honor-meta">${h.meta}</div>
-      <p>${h.detail}</p>
+    <div class="chat-footer">
+      <input type="text" id="chat-input" placeholder="Ask a question..." onkeydown="if(event.key==='Enter') sendMessage()" />
+      <button id="send-btn" onclick="sendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
     </div>
-  `).join('');
+  </div>
 
-document.getElementById('recommendationsList').innerHTML =
-  CONFIG.recommendations.map(r => `
-    <div class="quote-card">
-      <p>&ldquo;${r.quote}&rdquo;</p>
-      <div class="quote-attr"><strong>${r.name}</strong> — ${r.title}</div>
-    </div>
-  `).join('');
+  <script>
+    // Replace with your actual Cloudflare Worker URL
+    const WORKER_URL = "https://your-worker-name.subdomain.workers.dev";
 
-document.getElementById('chipRow').innerHTML =
-  CONFIG.suggestedQuestions.map(q => `<button class="chip" data-q="${q}">${q}</button>`).join('');
-
-// ---- chat logic & backend integration ----
-const chatLog = document.getElementById('chatLog');
-const input = document.getElementById('chatInput');
-const sendBtn = document.getElementById('sendBtn');
-
-let history = [];
-const WORKER_URL = "https://silent-sea-bd9b.ankitpandeycs.workers.dev";
-
-function removeChatCompletely() {
-  const deskSection = document.getElementById('desk');
-  if (deskSection) {
-    deskSection.style.display = 'none';
-  }
-  const navLink = document.getElementById('navDeskLink');
-  if (navLink) {
-    navLink.remove();
-  }
-}
-
-// Check token status from worker immediately on page load
-async function checkInitialTokenStatus() {
-  try {
-    const response = await fetch(`${WORKER_URL}/status`);
-    const data = await response.json();
-    if (data.tokensExhausted) {
-      removeChatCompletely();
-    }
-  } catch (err) {
-    console.error("Could not verify initial token status", err);
-  }
-}
-checkInitialTokenStatus();
-
-function addMessage(role, text, thinking=false){
-  const div = document.createElement('div');
-  div.className = `msg ${role}`;
-  div.innerHTML = `
-<div class="role-tag">${role === 'user' ? 'You' : 'Archivist'}</div>
-<div class="bubble${thinking ? ' thinking' : ''}">
-    ${role === 'assistant' && !thinking ? marked.parse(text) : text}
-</div>`;
-  chatLog.appendChild(div);
-  chatLog.scrollTop = chatLog.scrollHeight;
-  return div;
-}
-
-async function sendMessage(text){
-  const cleanText = text.trim();
-  if(!cleanText) return;
-
-  addMessage('user', cleanText);
-  history.push({ role: 'user', content: cleanText });
-  input.value = '';
-  sendBtn.disabled = true;
-
-  const thinkingBubble = addMessage('assistant', 'Looking that up…', true);
-
-  try{
-    const response = await fetch(WORKER_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        message: history[history.length - 1].content
-      })
-    });
-    const data = await response.json();
-    const replyText = data.reply || "Sorry, I couldn't find an answer.";
-     
-    thinkingBubble.remove();
-    addMessage('assistant', replyText);
-    history.push({ role: 'assistant', content: replyText });
-
-    // Handle token exhaustion flag returned directly by the server
-    if (data.tokensExhausted) {
-      removeChatCompletely();
-      return;
+    // Check Token Budget Status on Page Load
+    async function checkStatus() {
+      try {
+        const res = await fetch(`${WORKER_URL}/status`);
+        const data = await res.json();
+        if (data.tokensExhausted) {
+          disableChat("Token budget exhausted for today. Please reach out via email or LinkedIn!");
+        }
+      } catch (err) {
+        console.warn("Could not fetch status, proceeding default.");
+      }
     }
 
-  }catch(err){
-    thinkingBubble.remove();
-    addMessage('assistant', "Something went wrong reaching the archive. Please try again.");
-    console.error(err);
-  }finally{
-    if (document.getElementById('desk').style.display !== 'none') {
-      sendBtn.disabled = false;
+    function toggleChat() {
+      const win = document.getElementById("chat-window");
+      win.style.display = win.style.display === "flex" ? "none" : "flex";
     }
-  }
-}
 
-sendBtn.addEventListener('click', () => sendMessage(input.value));
-input.addEventListener('keydown', e => { if(e.key === 'Enter') sendMessage(input.value); });
-document.getElementById('chipRow').addEventListener('click', e => {
-  if(e.target.matches('.chip')) sendMessage(e.target.dataset.q);
-});
-</script>
+    function disableChat(reasonMessage) {
+      const chatInput = document.getElementById("chat-input");
+      const sendBtn = document.getElementById("send-btn");
+      chatInput.disabled = true;
+      chatInput.placeholder = "Chat disabled.";
+      sendBtn.disabled = true;
+
+      const chatBody = document.getElementById("chat-body");
+      const systemMsg = document.createElement("div");
+      systemMsg.className = "msg system";
+      systemMsg.innerText = reasonMessage;
+      chatBody.appendChild(systemMsg);
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById("chat-input");
+      const text = input.value.trim();
+      if (!text) return;
+
+      const chatBody = document.getElementById("chat-body");
+
+      // Render User Message
+      const userMsg = document.createElement("div");
+      userMsg.className = "msg user";
+      userMsg.innerText = text;
+      chatBody.appendChild(userMsg);
+
+      input.value = "";
+      chatBody.scrollTop = chatBody.scrollHeight;
+
+      // Render Temporary Bot Loading
+      const botMsg = document.createElement("div");
+      botMsg.className = "msg bot";
+      botMsg.innerText = "Thinking...";
+      chatBody.appendChild(botMsg);
+
+      try {
+        const res = await fetch(`${WORKER_URL}/`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: text })
+        });
+
+        const data = await res.json();
+
+        if (data.reply) {
+          botMsg.innerText = data.reply;
+        } else {
+          botMsg.innerText = "Sorry, I ran into an issue generating a response.";
+        }
+
+        // If this message depleted the tokens, immediately disable chat
+        if (data.tokensExhausted) {
+          disableChat("Token budget has been reached. Chat is now disabled.");
+        }
+
+      } catch (err) {
+        botMsg.innerText = "Error connecting to backend assistant.";
+      }
+
+      chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    // Run status check on load
+    checkStatus();
+  </script>
 </body>
 </html>
