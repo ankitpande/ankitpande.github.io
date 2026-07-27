@@ -301,7 +301,8 @@
 
 <div class="wrap">
   <section class="hero">
-    <div class="hero-top">      <div class="hero-label">Personal Archive · Est. 2026</div>
+    <div class="hero-top">
+      <div class="hero-label">Personal Archive · Est. 2026</div>
     </div>
     <h1 id="heroName">Ankit Pandey</h1>
     <div class="role" id="heroRole">National Lead – AI, Bajaj Finance Limited</div>
@@ -488,8 +489,7 @@ const CONFIG = {
 };
 
 // ---- token budget setup ----
-let remainingTokens = 250;
-const totalTokens = 250;
+let remainingTokens = 250; 
 
 // ---- render content from CONFIG ----
 document.getElementById('heroName').textContent = CONFIG.name;
@@ -558,41 +558,20 @@ const sendBtn = document.getElementById('sendBtn');
 
 let history = [];
 
-function systemPrompt(){
-  const timelineText = CONFIG.timelineGroups.map(g =>
-    `${g.employer}: ` + g.roles.map(r => `${r.title} (${r.year}) — ${r.detail}`).join(' | ')
-  ).join('\n');
-  const eduText = CONFIG.education.map(e => `${e.school}: ${e.detail}`).join(' | ');
-  const honorsText = CONFIG.honors.map(h => `${h.title} (${h.meta}): ${h.detail}`).join(' | ');
-  const recText = CONFIG.recommendations.map(r => `${r.name} (${r.title}) said: "${r.quote}"`).join(' | ');
-
-  return `You are "the archivist" — an assistant embedded on ${CONFIG.name}'s personal website. Answer visitor questions about ${CONFIG.name} using ONLY the facts below. Speak in third person about them, warmly and concisely (2-4 sentences per answer). If asked something not covered by these facts, say you don't have that information rather than inventing it.
-
-Name: ${CONFIG.name}
-Current role: ${CONFIG.role}
-Location: ${CONFIG.location}
-Bio: ${CONFIG.bio}
-Currently: ${CONFIG.now}
-Skills: ${CONFIG.skills.join(', ')}
-Certifications: ${CONFIG.certifications.join(' | ')}
-Career history: ${timelineText}
-Education: ${eduText}
-Honors & awards: ${honorsText}
-What colleagues have said about him: ${recText}`;
-}
-
 function removeChatCompletely() {
-  // Hide the chat section entirely from the DOM
   const deskSection = document.getElementById('desk');
   if (deskSection) {
     deskSection.style.display = 'none';
   }
-
-  // Remove its navigation link from the header index so it leaves no visual trace
   const navLinks = document.querySelectorAll('a[href="#desk"]');
   navLinks.forEach(link => link.remove());
 }
-  
+
+// Immediate check on initialization if tokens are already finished
+if (remainingTokens <= 0) {
+  removeChatCompletely();
+}
+
 function addMessage(role, text, thinking=false){
   const div = document.createElement('div');
   div.className = `msg ${role}`;
@@ -610,14 +589,14 @@ async function sendMessage(text){
   const cleanText = text.trim();
   if(!cleanText) return;
 
-  // 1. Check if tokens are already exhausted
-  if (remainingTokens <= 0) return;
+  if (remainingTokens <= 0) {
+    removeChatCompletely();
+    return;
+  }
 
-  // 2. Deduct tokens based on message length
   const tokenCost = Math.max(35, cleanText.length + 25);
   remainingTokens = Math.max(0, remainingTokens - tokenCost);
 
-  // 3. If depleted, wipe it from the DOM completely and exit
   if (remainingTokens <= 0) {
     removeChatCompletely();
     return;
