@@ -880,24 +880,26 @@ function removeChatCompletely() {
   }
 }
 
+// Safely check status on page load without prematurely hiding the chat in Chrome
 async function checkInitialTokenStatus() {
   try {
     const response = await fetch(`${WORKER_URL}/status`);
     
-    // If the server returns 429, 500, or any non-OK status code
-    if (!response.ok) {
+    // Explicit rate-limit/quota exhaustion code from Cloudflare Worker
+    if (response.status === 429) {
       removeChatCompletely();
       return;
     }
 
-    const data = await response.json();
-    if (data.tokensExhausted) {
-      removeChatCompletely();
+    if (response.ok) {
+      const data = await response.json();
+      if (data.tokensExhausted) {
+        removeChatCompletely();
+      }
     }
   } catch (err) {
-    console.error("Token check failed or worker unavailable:", err);
-    // Hide chat on fetch error, CORS issue, or unparseable JSON
-    removeChatCompletely();
+    // Log warning for debugging in Chrome console; keep chat available as a fallback
+    console.warn("Status check failed or worker endpoint unreached:", err);
   }
 }
 checkInitialTokenStatus();
@@ -935,10 +937,16 @@ async function sendMessage(text) {
       })
     });
 
-    // Handle 429 Too Many Requests or non-200 responses immediately
-    if (response.status === 429 || !response.ok) {
+    // Handle 429 Too Many Requests immediately
+    if (response.status === 429) {
       thinkingBubble.remove();
       removeChatCompletely();
+      return;
+    }
+
+    if (!response.ok) {
+      thinkingBubble.remove();
+      addMessage('assistant', "Sorry, I'm currently unable to answer. Please try again in a few moments.");
       return;
     }
 
@@ -956,8 +964,7 @@ async function sendMessage(text) {
   } catch (err) {
     thinkingBubble.remove();
     console.error("Send message error:", err);
-    // Hide chat if mid-chat error or rate limit response fails to parse
-    removeChatCompletely();
+    addMessage('assistant', "Sorry, a network connection error occurred.");
   } finally {
     const deskSection = document.getElementById('desk');
     if (deskSection && deskSection.style.display !== 'none') {
