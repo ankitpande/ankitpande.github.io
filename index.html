@@ -491,7 +491,7 @@ const CONFIG = {
 
 
   // ---- token budget setup ----
-let remainingTokens = 250;
+
 const totalTokens = 250;
 
 // ---- render content from CONFIG ----
@@ -640,12 +640,41 @@ async function sendMessage(text){
     sendBtn.disabled = false;
   }
 }
+sendBtn.addEventListener('click', () => {
+  // 1. Stop if already out of tokens
+  if (remainingTokens <= 0) return;
 
-sendBtn.addEventListener('click', () => sendMessage(input.value));
+  const text = input.value.trim();
+  if (!text) return;
+
+  // 2. Deduct tokens based on message length
+  const tokenCost = Math.max(35, text.length + 25);
+  remainingTokens = Math.max(0, remainingTokens - tokenCost);
+
+  // 3. If depleted, wipe it from the DOM completely
+  if (remainingTokens <= 0) {
+    removeChatCompletely();
+    return;
+  }
+
+  // --- YOUR EXISTING CHAT SENDING/API CODE GOES HERE ---
+});
 input.addEventListener('keydown', e => { if(e.key === 'Enter') sendMessage(input.value); });
 document.getElementById('chipRow').addEventListener('click', e => {
   if(e.target.matches('.chip')) sendMessage(e.target.dataset.q);
 });
+// ---- token budget setup ----
+let remainingTokens = 250;
+
+function removeChatCompletely() {
+  const deskSection = document.getElementById('desk');
+  if (deskSection) {
+    deskSection.style.display = 'none';
+  }
+  const navLinks = document.querySelectorAll('a[href="#desk"]');
+  navLinks.forEach(link => link.remove());
+}
+  
 </script>
 </body>
 </html>
