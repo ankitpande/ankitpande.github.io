@@ -43,13 +43,6 @@
     padding:80px 0 60px;
   }
   .hero-top{ display:flex; align-items:center; gap:22px; margin-bottom:22px; }
-  .avatar{
-    width:84px; height:84px;
-    border-radius:50%;
-    border:2px solid var(--gold);
-    object-fit:cover;
-    flex-shrink:0;
-  }
   .hero-label{
     font-family:'IBM Plex Mono', monospace;
     font-size:12px;
@@ -488,9 +481,6 @@ const CONFIG = {
   ]
 };
 
-// ---- token budget setup ----
-let remainingTokens = 250; 
-
 // ---- render content from CONFIG ----
 document.getElementById('heroName').textContent = CONFIG.name;
 document.getElementById('heroRole').textContent = CONFIG.role;
@@ -551,12 +541,13 @@ document.getElementById('recommendationsList').innerHTML =
 document.getElementById('chipRow').innerHTML =
   CONFIG.suggestedQuestions.map(q => `<button class="chip" data-q="${q}">${q}</button>`).join('');
 
-// ---- chat logic ----
+// ---- chat logic & backend integration ----
 const chatLog = document.getElementById('chatLog');
 const input = document.getElementById('chatInput');
 const sendBtn = document.getElementById('sendBtn');
 
 let history = [];
+const WORKER_URL = "https://silent-sea-bd9b.ankitpandeycs.workers.dev";
 
 function removeChatCompletely() {
   const deskSection = document.getElementById('desk');
@@ -567,10 +558,19 @@ function removeChatCompletely() {
   navLinks.forEach(link => link.remove());
 }
 
-// Immediate check on initialization if tokens are already finished
-if (remainingTokens <= 0) {
-  removeChatCompletely();
+// 1. Check token status from worker immediately on page load
+async function checkInitialTokenStatus() {
+  try {
+    const response = await fetch(`${WORKER_URL}/status`);
+    const data = await response.json();
+    if (data.tokensExhausted) {
+      removeChatCompletely();
+    }
+  } catch (err) {
+    console.error("Could not verify initial token status", err);
+  }
 }
+checkInitialTokenStatus();
 
 function addMessage(role, text, thinking=false){
   const div = document.createElement('div');
@@ -585,22 +585,10 @@ function addMessage(role, text, thinking=false){
   return div;
 }
 
+// 2. Track exhaustion dynamically during chat session responses
 async function sendMessage(text){
   const cleanText = text.trim();
   if(!cleanText) return;
-
-  if (remainingTokens <= 0) {
-    removeChatCompletely();
-    return;
-  }
-
-  const tokenCost = Math.max(35, cleanText.length + 25);
-  remainingTokens = Math.max(0, remainingTokens - tokenCost);
-
-  if (remainingTokens <= 0) {
-    removeChatCompletely();
-    return;
-  }
 
   addMessage('user', cleanText);
   history.push({ role: 'user', content: cleanText });
@@ -610,7 +598,7 @@ async function sendMessage(text){
   const thinkingBubble = addMessage('assistant', 'Looking that up…', true);
 
   try{
-    const response = await fetch("https://silent-sea-bd9b.ankitpandeycs.workers.dev", {
+    const response = await fetch(WORKER_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -623,12 +611,21 @@ async function sendMessage(text){
     thinkingBubble.remove();
     addMessage('assistant', replyText);
     history.push({ role: 'assistant', content: replyText });
+
+    // Handle token exhaustion flag returned directly by the server
+    if (data.tokensExhausted) {
+      removeChatCompletely();
+      return;
+    }
+
   }catch(err){
     thinkingBubble.remove();
     addMessage('assistant', "Something went wrong reaching the archive. Please try again.");
     console.error(err);
   }finally{
-    sendBtn.disabled = false;
+    if (document.getElementById('desk').style.display !== 'none') {
+      sendBtn.disabled = false;
+    }
   }
 }
 
