@@ -372,7 +372,7 @@
     <div id="recommendationsList"></div>
   </section>
 
-  <section class="desk" id="ask">
+  <section class="desk" id="desk">
     <div class="desk-header">
       <h2>Ask the archive</h2>
       <p>This chat is grounded in everything on this page — ask it anything about my background, career, or skills.</p>
@@ -579,6 +579,18 @@ Honors & awards: ${honorsText}
 What colleagues have said about him: ${recText}`;
 }
 
+function removeChatCompletely() {
+  // Hide the chat section entirely
+  const deskSection = document.getElementById('desk');
+  if (deskSection) {
+    deskSection.style.display = 'none';
+  }
+
+  // Optional: If you have a nav link pointing to `#desk`, remove it from the header index too
+  const navLinks = document.querySelectorAll('a[href="#desk"]');
+  navLinks.forEach(link => link.remove());
+}
+  
 function addMessage(role, text, thinking=false){
   const div = document.createElement('div');
   div.className = `msg ${role}`;
