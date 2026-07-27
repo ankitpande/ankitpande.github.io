@@ -159,9 +159,6 @@
   .card p{ opacity:0.85; }
   .card p + p{ margin-top:10px; }
 
-  .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:18px; }
-  @media(max-width:640px){ .grid-2{ grid-template-columns:1fr; } }
-
   .tag-row{ display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
   .tag{
     font-family:'IBM Plex Mono', monospace;
@@ -202,41 +199,6 @@
   .timeline-body h4{ font-family:'Fraunces', serif; font-size:1.08rem; font-weight:600; }
   .timeline-body p{ opacity:0.75; font-size:0.93rem; margin-top:4px; }
 
-  /* honors list */
-  .honor-item{ padding:16px 0; border-bottom:1px solid var(--line); }
-  .honor-item:last-child{ border-bottom:none; }
-  .honor-item h4{ font-family:'Fraunces', serif; font-size:1.05rem; font-weight:600; }
-  .honor-item .honor-meta{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:10.5px;
-    color:var(--forest);
-    opacity:1;
-    margin-top:2px;
-    letter-spacing:0.03em;
-  }
-  .honor-item p{ opacity:0.8; font-size:0.92rem; margin-top:6px; }
-
-  /* recommendation quote cards */
-  .quote-card{
-    background:var(--paper);
-    color:var(--ink);
-    border-radius:2px;
-    padding:30px 34px;
-    margin-bottom:16px;
-    position:relative;
-    border-left:3px solid var(--gold);
-  }
-  .quote-card p{ font-family:'Fraunces', serif; font-style:italic; font-size:1.05rem; opacity:0.9; line-height:1.6; }
-  .quote-attr{
-    margin-top:16px;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11px;
-    color:var(--ink);
-    opacity:0.75;
-    letter-spacing:0.02em;
-  }
-  .quote-attr strong{ font-style:normal; opacity:1; color:var(--rust); }
-
   /* ---------- REFERENCE DESK (CHAT) ---------- */
   .desk{ padding:80px 0 140px; }
   .desk-header{ margin-bottom:32px; }
@@ -272,7 +234,6 @@
   .msg .bubble{ padding:12px 16px; border-radius:2px; font-size:0.95rem; line-height:1.5; }
   .msg.assistant .bubble{ background:var(--paper-light); border:1px solid var(--line); }
   .msg.user .bubble{ background:var(--forest); color:var(--paper-light); }
-  .msg.assistant .bubble.thinking{ opacity:0.5; font-style:italic; }
 
   .chip-row{ display:flex; flex-wrap:wrap; gap:8px; padding:0 24px 16px; }
   .chip{
@@ -301,8 +262,6 @@
     padding:40px 0 60px; text-align:center;
     font-family:'IBM Plex Mono', monospace; font-size:11px; opacity:0.4; letter-spacing:0.05em;
   }
-
-  @media (prefers-reduced-motion: reduce){ *{ transition:none !important; scroll-behavior:auto !important; } }
 </style>
 </head>
 <body>
@@ -419,7 +378,7 @@
     const text = input.value.trim();
     if(!text) return;
 
-    // Estimate consumption cost per interaction
+    // Deduct token cost
     const tokenCost = Math.max(40, text.length + 30);
     remainingTokens = Math.max(0, remainingTokens - tokenCost);
     updateTokenDisplay();
@@ -435,20 +394,26 @@
     input.value = '';
     chatLog.scrollTop = chatLog.scrollHeight;
 
-    // Check if tokens exhausted after request
+    // Check if tokens are exhausted
     if (remainingTokens <= 0) {
       lockTerminal();
       return;
     }
 
-    // Simulate assistant reply using marked.js parser
+    // Dynamic intelligent response simulation
     setTimeout(() => {
       const assistantMsg = document.createElement('div');
       assistantMsg.className = 'msg assistant';
       
-      const rawReply = `Thanks for your inquiry regarding **${text}**. This section of the archive is ready for integration with backend processing scripts or custom logic!`;
-      
-      assistantMsg.innerHTML = `<div class="role-tag">Archive Assistant</div><div class="bubble">${marked.parse(rawReply)}</div>`;
+      let replyText = "I focus on high-scale backend architecture, clean systems, and robust software engineering practices.";
+      const lower = text.toLowerCase();
+      if(lower.includes('work') || lower.includes('project')) {
+        replyText = "My recent work involves designing distributed systems, optimizing backend reliability, and exploring modern workflow automation tools.";
+      } else if(lower.includes('skill') || lower.includes('stack')) {
+        replyText = "Core proficiencies include **System Architecture**, **Software Engineering**, and building responsive, high-performance interfaces.";
+      }
+
+      assistantMsg.innerHTML = `<div class="role-tag">Archive Assistant</div><div class="bubble">${marked.parse(replyText)}</div>`;
       chatLog.appendChild(assistantMsg);
       chatLog.scrollTop = chatLog.scrollHeight;
     }, 600);
