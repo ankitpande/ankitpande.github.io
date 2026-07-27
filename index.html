@@ -8,10 +8,11 @@
   <!-- Inter Font & FontAwesome Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
   <style>
+    /* CSS Custom Properties & Reset */
     :root {
       --bg-dark: #0f172a;
       --card-bg: #1e293b;
@@ -21,25 +22,37 @@
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --danger: #ef4444;
+      --danger-bg: rgba(239, 68, 68, 0.12);
       --radius: 12px;
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
       background-color: var(--bg-dark);
       color: var(--text-main);
       line-height: 1.6;
-      padding-bottom: 80px;
+      padding-bottom: 60px;
     }
 
-    /* Container & Layout */
+    /* Container Layout */
     .container {
       max-width: 1100px;
       margin: 0 auto;
       padding: 0 24px;
     }
 
+    /* Header & Navigation */
     header {
       padding: 24px 0;
       display: flex;
@@ -47,21 +60,144 @@
       align-items: center;
       border-bottom: 1px solid var(--card-border);
     }
-    .logo { font-weight: 700; font-size: 1.25rem; color: var(--accent); }
-    nav a { color: var(--text-muted); text-decoration: none; margin-left: 20px; font-weight: 500; transition: 0.2s; }
-    nav a:hover { color: var(--text-main); }
+
+    .logo {
+      font-weight: 800;
+      font-size: 1.25rem;
+      color: var(--accent);
+      letter-spacing: -0.5px;
+    }
+
+    nav {
+      display: flex;
+      gap: 20px;
+    }
+
+    nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: color 0.2s ease;
+    }
+
+    nav a:hover {
+      color: var(--text-main);
+    }
 
     /* Hero Section */
     .hero {
       padding: 60px 0 40px;
-      text-align: left;
     }
-    .hero h1 { font-size: 2.75rem; font-weight: 800; margin-bottom: 12px; }
-    .hero p { font-size: 1.2rem; color: var(--text-muted); max-width: 650px; }
 
-    /* Contact Grid (Dynamic & Aligned) */
-    .section-title { font-size: 1.5rem; margin: 40px 0 20px; font-weight: 600; }
-    
+    .hero-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      color: var(--accent);
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 16px;
+      letter-spacing: -1px;
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 680px;
+      margin-bottom: 28px;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #0f172a;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      color: #fff;
+    }
+
+    .btn-secondary {
+      background: var(--card-bg);
+      color: var(--text-main);
+      border: 1px solid var(--card-border);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent);
+    }
+
+    /* Section Titles */
+    .section-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin: 48px 0 20px;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Skills Grid */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .skill-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+
+    .skill-card h4 {
+      font-size: 1rem;
+      color: var(--accent);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .skill-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    /* Contact Grid */
     .contact-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -79,52 +215,84 @@
       gap: 16px;
       text-decoration: none;
       color: var(--text-main);
-      transition: transform 0.2s, border-color 0.2s;
+      transition: transform 0.2s ease, border-color 0.2s ease;
     }
+
     .contact-card:hover {
       transform: translateY(-3px);
       border-color: var(--accent);
     }
-    .contact-card i { font-size: 1.5rem; color: var(--accent); }
-    .contact-card .details label { display: block; font-size: 0.8rem; color: var(--text-muted); }
-    .contact-card .details span { font-weight: 600; font-size: 0.95rem; }
 
-    /* Chat Floating Toggle Button */
-    #chat-toggle {
+    .contact-card i {
+      font-size: 1.5rem;
+      color: var(--accent);
+      width: 24px;
+      text-align: center;
+    }
+
+    .contact-card .details label {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 600;
+    }
+
+    .contact-card .details span {
+      font-weight: 600;
+      font-size: 0.95rem;
+      word-break: break-word;
+    }
+
+    /* Floating AI Chat Trigger Button */
+    #ai-chat-toggle {
       position: fixed;
       bottom: 24px;
       right: 24px;
       background: var(--accent);
-      color: #000;
+      color: #0f172a;
       border: none;
       padding: 14px 22px;
       border-radius: 30px;
-      font-weight: 600;
+      font-weight: 700;
+      font-size: 0.95rem;
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 10px;
       box-shadow: 0 10px 25px rgba(56, 189, 248, 0.3);
-      transition: 0.2s;
+      transition: transform 0.2s ease, background 0.2s ease;
       z-index: 1000;
     }
-    #chat-toggle:hover { background: var(--accent-hover); color: #fff; }
 
-    /* Chat Modal Window */
-    #chat-window {
+    #ai-chat-toggle:hover {
+      background: var(--accent-hover);
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+
+    /* Floating AI Chat Modal */
+    #ai-chat-window {
       position: fixed;
-      bottom: 90px;
+      bottom: 88px;
       right: 24px;
       width: 380px;
+      max-width: calc(100vw - 32px);
       height: 520px;
+      max-height: calc(100vh - 120px);
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: var(--radius);
       display: none;
       flex-direction: column;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      box-shadow: var(--shadow);
       z-index: 1000;
       overflow: hidden;
+    }
+
+    #ai-chat-window.open {
+      display: flex !important;
     }
 
     .chat-header {
@@ -135,8 +303,28 @@
       justify-content: space-between;
       align-items: center;
     }
-    .chat-header h4 { font-size: 0.95rem; display: flex; align-items: center; gap: 8px; }
-    .close-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.1rem; }
+
+    .chat-header h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1.1rem;
+      padding: 4px;
+      transition: color 0.2s ease;
+    }
+
+    .close-btn:hover {
+      color: var(--text-main);
+    }
 
     .chat-body {
       flex: 1;
@@ -146,58 +334,166 @@
       flex-direction: column;
       gap: 12px;
       font-size: 0.9rem;
+      scroll-behavior: smooth;
     }
 
-    .msg { padding: 10px 14px; border-radius: 8px; max-width: 85%; }
-    .msg.user { background: var(--accent); color: #000; align-self: flex-end; font-weight: 500; }
-    .msg.bot { background: #334155; color: var(--text-main); align-self: flex-start; white-space: pre-wrap; }
-    .msg.system { background: rgba(239, 68, 68, 0.1); border: 1px solid var(--danger); color: var(--danger); align-self: center; text-align: center; font-size: 0.8rem; width: 100%; }
+    /* Scrollbar Styling */
+    .chat-body::-webkit-scrollbar {
+      width: 6px;
+    }
+    .chat-body::-webkit-scrollbar-thumb {
+      background: var(--card-border);
+      border-radius: 3px;
+    }
+
+    .msg {
+      padding: 10px 14px;
+      border-radius: 8px;
+      max-width: 85%;
+      line-height: 1.45;
+      word-wrap: break-word;
+    }
+
+    .msg.user {
+      background: var(--accent);
+      color: #0f172a;
+      align-self: flex-end;
+      font-weight: 500;
+      border-bottom-right-radius: 2px;
+    }
+
+    .msg.bot {
+      background: #334155;
+      color: var(--text-main);
+      align-self: flex-start;
+      border-bottom-left-radius: 2px;
+      white-space: pre-wrap;
+    }
+
+    .msg.system {
+      background: var(--danger-bg);
+      border: 1px solid var(--danger);
+      color: #f87171;
+      align-self: center;
+      text-align: center;
+      font-size: 0.8rem;
+      width: 100%;
+      max-width: 100%;
+      border-radius: 6px;
+    }
 
     .chat-footer {
       padding: 12px;
       border-top: 1px solid var(--card-border);
       display: flex;
       gap: 8px;
+      background: #0f172a;
     }
+
     .chat-footer input {
       flex: 1;
-      background: #0f172a;
+      background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 6px;
-      padding: 10px;
-      color: #fff;
+      padding: 10px 12px;
+      color: var(--text-main);
+      font-size: 0.9rem;
       outline: none;
+      transition: border-color 0.2s ease;
     }
+
+    .chat-footer input:focus {
+      border-color: var(--accent);
+    }
+
+    .chat-footer input:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
     .chat-footer button {
       background: var(--accent);
+      color: #0f172a;
       border: none;
       padding: 10px 16px;
       border-radius: 6px;
       cursor: pointer;
       font-weight: 600;
+      transition: background 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .chat-footer button:hover:not(:disabled) {
+      background: var(--accent-hover);
+      color: #fff;
+    }
+
+    .chat-footer button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    footer {
+      margin-top: 60px;
+      padding-top: 24px;
+      border-top: 1px solid var(--card-border);
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
     }
   </style>
 </head>
 <body>
 
   <div class="container">
+    <!-- Navigation Bar -->
     <header>
       <div class="logo">Ankit Pandey</div>
       <nav>
         <a href="#about">About</a>
-        <a href="#projects">Projects</a>
+        <a href="#skills">Skills</a>
         <a href="#contact">Contact</a>
       </nav>
     </header>
 
-    <section class="hero">
-      <h1>AI Engineer & System Architect</h1>
-      <p>Building enterprise AI solutions, serverless middleware, and RAG architectures.</p>
+    <!-- Hero Section -->
+    <section class="hero" id="about">
+      <span class="hero-badge"><i class="fa-solid fa-sparkles"></i> AI Systems & Engineering</span>
+      <h1>Architecting Intelligent, Stateful Middleware & RAG</h1>
+      <p>Building high-performance AI implementations, token-managed serverless architectures, and dynamic knowledge lookup engines.</p>
+      
+      <div class="cta-buttons">
+        <a href="#contact" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i> Get in Touch</a>
+        <button class="btn btn-secondary" onclick="toggleChat()"><i class="fa-solid fa-robot"></i> Test Portfolio AI</button>
+      </div>
     </section>
 
-    <!-- Aligned Dynamic Contact Cards -->
-    <h3 class="section-title" id="contact">Get in Touch</h3>
+    <!-- Skills & Architecture Highlights -->
+    <h3 class="section-title" id="skills"><i class="fa-solid fa-code"></i> Core Expertise</h3>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <h4><i class="fa-solid fa-bolt"></i> Serverless AI Middleware</h4>
+        <p>Stateful worker pipelines (Cloudflare Workers + Gemini) with automated KV token tracking and zero-trust safety guardrails.</p>
+      </div>
+
+      <div class="skill-card">
+        <h4><i class="fa-solid fa-database"></i> Dynamic Knowledge Retrieval</h4>
+        <p>Keyword-indexed JSON document mappers fetching minimal markdown contexts to slash token usage and latency.</p>
+      </div>
+
+      <div class="skill-card">
+        <h4><i class="fa-solid fa-layer-group"></i> Full-Stack Engineering</h4>
+        <p>Responsive, light-weight UI integrations built for immediate responsiveness and seamless mobile compatibility.</p>
+      </div>
+    </div>
+
+    <!-- Contact & Online Profiles -->
+    <h3 class="section-title" id="contact"><i class="fa-solid fa-address-book"></i> Contact Details</h3>
     <div class="contact-grid">
+      
+      <!-- Email Card -->
       <a href="mailto:your.email@example.com" class="contact-card">
         <i class="fa-solid fa-envelope"></i>
         <div class="details">
@@ -206,7 +502,8 @@
         </div>
       </a>
 
-      <a href="https://linkedin.com/in/yourprofile" target="_blank" class="contact-card">
+      <!-- LinkedIn Card -->
+      <a href="https://linkedin.com/in/yourprofile" target="_blank" rel="noopener noreferrer" class="contact-card">
         <i class="fa-brands fa-linkedin"></i>
         <div class="details">
           <label>LinkedIn</label>
@@ -214,7 +511,8 @@
         </div>
       </a>
 
-      <a href="https://github.com/ankitpande" target="_blank" class="contact-card">
+      <!-- GitHub Card -->
+      <a href="https://github.com/ankitpande" target="_blank" rel="noopener noreferrer" class="contact-card">
         <i class="fa-brands fa-github"></i>
         <div class="details">
           <label>GitHub</label>
@@ -222,6 +520,7 @@
         </div>
       </a>
 
+      <!-- Location Card -->
       <div class="contact-card">
         <i class="fa-solid fa-location-dot"></i>
         <div class="details">
@@ -229,116 +528,154 @@
           <span>Pune, Maharashtra, India</span>
         </div>
       </div>
+
     </div>
+
+    <footer>
+      <p>&copy; 2026 Ankit Pandey. Powered by Cloudflare Workers & Gemini AI.</p>
+    </footer>
   </div>
 
-  <!-- AI Chat Widget Trigger -->
-  <button id="chat-toggle" onclick="toggleChat()">
-    <i class="fa-solid fa-robot"></i> Ask My AI Assistant
+  <!-- Floating AI Assistant Button -->
+  <button id="ai-chat-toggle" onclick="toggleChat()" aria-label="Open AI Assistant">
+    <i class="fa-solid fa-robot"></i> Ask My AI
   </button>
 
-  <!-- Floating Chat Window -->
-  <div id="chat-window">
+  <!-- Floating AI Chat Modal -->
+  <div id="ai-chat-window">
     <div class="chat-header">
-      <h4><i class="fa-solid fa-sparkles"></i> Portfolio AI</h4>
-      <button class="close-btn" onclick="toggleChat()"><i class="fa-solid fa-xmark"></i></button>
+      <h4><i class="fa-solid fa-brain"></i> Portfolio AI Assistant</h4>
+      <button class="close-btn" onclick="toggleChat()" aria-label="Close Chat Window">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
     </div>
+    
     <div class="chat-body" id="chat-body">
-      <div class="msg bot">Hi! I'm Ankit's AI Assistant. Ask me anything about his experience, projects, or technical skills.</div>
+      <div class="msg bot">Hi! I'm Ankit's AI Assistant. Ask me anything about his skills, experience, or contact details!</div>
     </div>
+
     <div class="chat-footer">
-      <input type="text" id="chat-input" placeholder="Ask a question..." onkeydown="if(event.key==='Enter') sendMessage()" />
-      <button id="send-btn" onclick="sendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+      <input type="text" id="chat-input" placeholder="Type your message..." onkeydown="handleKeyPress(event)" />
+      <button id="send-btn" onclick="sendMessage()" aria-label="Send Message">
+        <i class="fa-solid fa-paper-plane"></i>
+      </button>
     </div>
   </div>
 
   <script>
-    // Replace with your actual Cloudflare Worker URL
-    const WORKER_URL = "https://your-worker-name.subdomain.workers.dev";
+    // Config: Cloudflare Worker Endpoint
+    const RAW_WORKER_URL = "https://your-worker-name.subdomain.workers.dev"; // Replace with your live Worker URL
+    const WORKER_URL = RAW_WORKER_URL.replace(/\/+$/, ""); // Normalizes trailing slash bug
 
-    // Check Token Budget Status on Page Load
-    async function checkStatus() {
-      try {
-        const res = await fetch(`${WORKER_URL}/status`);
-        const data = await res.json();
-        if (data.tokensExhausted) {
-          disableChat("Token budget exhausted for today. Please reach out via email or LinkedIn!");
-        }
-      } catch (err) {
-        console.warn("Could not fetch status, proceeding default.");
+    let isRequestPending = false;
+
+    // Toggle Chat Visibility via CSS class
+    function toggleChat() {
+      const chatWin = document.getElementById("ai-chat-window");
+      chatWin.classList.toggle("open");
+      if (chatWin.classList.contains("open")) {
+        document.getElementById("chat-input").focus();
       }
     }
 
-    function toggleChat() {
-      const win = document.getElementById("chat-window");
-      win.style.display = win.style.display === "flex" ? "none" : "flex";
+    function handleKeyPress(e) {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
     }
 
-    function disableChat(reasonMessage) {
+    // Safely append text nodes (Prevents HTML Injection / XSS)
+    function appendMessage(text, type) {
+      const chatBody = document.getElementById("chat-body");
+      const msgDiv = document.createElement("div");
+      msgDiv.className = `msg ${type}`;
+      msgDiv.textContent = text;
+      chatBody.appendChild(msgDiv);
+      chatBody.scrollTop = chatBody.scrollHeight;
+      return msgDiv;
+    }
+
+    // Disable Chat UI when Token Budget hits 0
+    function disableChatUI(reasonMessage) {
       const chatInput = document.getElementById("chat-input");
       const sendBtn = document.getElementById("send-btn");
+
       chatInput.disabled = true;
-      chatInput.placeholder = "Chat disabled.";
+      chatInput.placeholder = "AI Assistant offline (Budget Reached).";
       sendBtn.disabled = true;
 
-      const chatBody = document.getElementById("chat-body");
-      const systemMsg = document.createElement("div");
-      systemMsg.className = "msg system";
-      systemMsg.innerText = reasonMessage;
-      chatBody.appendChild(systemMsg);
+      appendMessage(reasonMessage, "system");
     }
 
+    // Check KV Token Balance on Initial Page Load
+    async function checkBudgetStatus() {
+      try {
+        const res = await fetch(`${WORKER_URL}/status`);
+        if (!res.ok) return;
+        
+        const data = await res.json();
+        if (data.tokensExhausted) {
+          disableChatUI("Daily AI token budget has been exhausted. Please reach out via Email or LinkedIn!");
+        }
+      } catch (err) {
+        console.warn("Could not reach worker status check endpoint, fallback enabled.");
+      }
+    }
+
+    // Send Message to Worker Backend
     async function sendMessage() {
       const input = document.getElementById("chat-input");
-      const text = input.value.trim();
-      if (!text) return;
+      const sendBtn = document.getElementById("send-btn");
+      const query = input.value.trim();
 
-      const chatBody = document.getElementById("chat-body");
+      if (!query || isRequestPending) return;
 
-      // Render User Message
-      const userMsg = document.createElement("div");
-      userMsg.className = "msg user";
-      userMsg.innerText = text;
-      chatBody.appendChild(userMsg);
-
+      // 1. Render User Message
+      appendMessage(query, "user");
       input.value = "";
-      chatBody.scrollTop = chatBody.scrollHeight;
 
-      // Render Temporary Bot Loading
-      const botMsg = document.createElement("div");
-      botMsg.className = "msg bot";
-      botMsg.innerText = "Thinking...";
-      chatBody.appendChild(botMsg);
+      // 2. Lock controls during request execution
+      isRequestPending = true;
+      sendBtn.disabled = true;
+
+      // 3. Render Placeholder Bot Response
+      const botMsgElement = appendMessage("Thinking...", "bot");
 
       try {
         const res = await fetch(`${WORKER_URL}/`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: text })
+          body: JSON.stringify({ message: query })
         });
+
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
 
         const data = await res.json();
 
-        if (data.reply) {
-          botMsg.innerText = data.reply;
-        } else {
-          botMsg.innerText = "Sorry, I ran into an issue generating a response.";
-        }
+        // 4. Update Bot Message safely
+        botMsgElement.textContent = data.reply || "Sorry, I received an empty response.";
 
-        // If this message depleted the tokens, immediately disable chat
+        // 5. If response signals token depletion, trigger shutdown
         if (data.tokensExhausted) {
-          disableChat("Token budget has been reached. Chat is now disabled.");
+          disableChatUI("Token budget limit reached. Assistant is now offline for the day.");
         }
 
       } catch (err) {
-        botMsg.innerText = "Error connecting to backend assistant.";
+        botMsgElement.textContent = "Error connecting to AI service. Please try again later.";
+      } finally {
+        isRequestPending = false;
+        if (!document.getElementById("chat-input").disabled) {
+          sendBtn.disabled = false;
+        }
+        document.getElementById("chat-body").scrollTop = document.getElementById("chat-body").scrollHeight;
       }
-
-      chatBody.scrollTop = chatBody.scrollHeight;
     }
 
-    // Run status check on load
-    checkStatus();
+    // Run status check on page load
+    document.addEventListener("DOMContentLoaded", checkBudgetStatus);
   </script>
 </body>
 </html>
