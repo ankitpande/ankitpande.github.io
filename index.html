@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>Resilient Chat Widget</title>
+<title>Ankit Pandey — Portfolio Assistant</title>
 <style>
   :root {
     color-scheme: light dark;
@@ -74,7 +74,6 @@
     text-align: center;
   }
 
-  /* ---------- Toast (shown when chat is removed) ---------- */
   #toast {
     position: fixed;
     bottom: 24px;
@@ -106,7 +105,6 @@
     background: var(--danger); flex-shrink: 0;
   }
 
-  /* ---------- Chat widget ---------- */
   #chat-widget {
     width: 100%;
     max-width: 420px;
@@ -216,7 +214,6 @@
     color: var(--danger);
   }
 
-  /* Typing indicator */
   .typing {
     display: flex;
     gap: 4px;
@@ -246,7 +243,6 @@
     border-top: 1px solid var(--border);
     background: var(--surface);
     flex-shrink: 0;
-    /* keeps input above mobile virtual keyboards / home indicator */
     padding-bottom: max(12px, env(safe-area-inset-bottom));
   }
 
@@ -260,7 +256,7 @@
     color: var(--text);
     border-radius: 12px;
     padding: 10px 14px;
-    font-size: 15px; /* close to 16px to avoid iOS auto-zoom while staying compact */
+    font-size: 15px;
     font-family: inherit;
     outline: none;
     line-height: 1.4;
@@ -287,7 +283,6 @@
   #send-btn:active:not(:disabled) { transform: scale(0.94); }
   #send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-  /* Mobile-first tweaks */
   @media (max-width: 480px) {
     .page { padding: 0; }
     #chat-widget {
@@ -306,26 +301,26 @@
 </head>
 <body>
 
-<div class="page-hint">Resilient Chat Widget demo — Gemini → OpenRouter failover</div>
+<div class="page-hint">Ask me about Ankit Pandey's experience, skills, and projects</div>
 
 <div class="page">
   <div id="chat-widget">
     <div class="chat-header">
       <div class="title">
         <span class="status-dot" id="statusDot"></span>
-        <span>Assistant</span>
+        <span>Ankit's Assistant</span>
       </div>
       <button class="theme-toggle" id="themeToggle" type="button">Toggle theme</button>
     </div>
 
     <div class="chat-log" id="chatLog">
       <div class="msg bot">
-        <div class="bubble">Hi! Ask me anything — I'll automatically switch providers behind the scenes if one is unavailable.</div>
+        <div class="bubble">Hi! I can answer questions about Ankit Pandey's experience, skills, education, and projects. What would you like to know?</div>
       </div>
     </div>
 
     <div class="chat-input-row">
-      <textarea id="chat-input" rows="1" placeholder="Type a message…" aria-label="Chat message"></textarea>
+      <textarea id="chat-input" rows="1" placeholder="Ask about Ankit's experience…" aria-label="Chat message"></textarea>
       <button id="send-btn" type="button" aria-label="Send message">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M3 11.5L21 3L13.5 21L10.5 13.5L3 11.5Z" stroke="white" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
@@ -345,11 +340,10 @@
   "use strict";
 
   // ---- Configuration ----
-  // Point this at your deployed Cloudflare Worker.
-  const WORKER_URL = "https://silent-sea-bd9b.ankitpandeycs.workers.dev";
+  const WORKER_URL = "https://ankit-portfolio-assistant.ankitpandeycs.workers.dev";
   const CHAT_ENDPOINT = `${WORKER_URL}/api/chat`;
   const STATUS_ENDPOINT = `${WORKER_URL}/api/status`;
-  const STATUS_POLL_MS = 60000; // re-check availability every 60s while hidden
+  const STATUS_POLL_MS = 60000;
 
   const widget = document.getElementById("chat-widget");
   const chatLog = document.getElementById("chatLog");
@@ -366,14 +360,12 @@
   let widgetRemoved = false;
   let pollHandle = null;
 
-  // ---------- Theme toggle (manual override of prefers-color-scheme) ----------
   themeToggle.addEventListener("click", () => {
     const current = document.documentElement.style.colorScheme || "light dark";
     document.documentElement.style.colorScheme =
       current === "light" ? "dark" : current === "dark" ? "light" : "light";
   });
 
-  // ---------- Auto-resizing textarea ----------
   input.addEventListener("input", () => {
     input.style.height = "auto";
     input.style.height = Math.min(input.scrollHeight, 120) + "px";
@@ -428,35 +420,22 @@
     toast.classList.remove("visible");
   }
 
-  /**
-   * Smoothly fades out and removes the widget from the DOM,
-   * then shows a toast explaining why.
-   */
   function removeWidget(message) {
     if (widgetRemoved) return;
     widgetRemoved = true;
-
     widget.classList.add("removing");
     showToast(message || "Chat is temporarily unavailable — please check back soon.");
-
     setTimeout(() => {
-      if (widget.parentNode) {
-        widget.parentNode.removeChild(widget);
-      }
-    }, 420); // matches CSS transition duration
+      if (widget.parentNode) widget.parentNode.removeChild(widget);
+    }, 420);
   }
 
-  /**
-   * Re-inserts the widget if it had been removed and a provider
-   * becomes available again.
-   */
   function restoreWidgetIfNeeded() {
     if (!widgetRemoved) return;
     widgetRemoved = false;
     widget.classList.remove("removing");
     pageContainer.appendChild(widget);
     hideToast();
-    // Force reflow so the transition plays on re-entry.
     void widget.offsetWidth;
   }
 
@@ -538,7 +517,6 @@
     }
   }
 
-  // ---------- Initial boot ----------
   refreshAvailability();
   startAvailabilityPolling();
 })();
